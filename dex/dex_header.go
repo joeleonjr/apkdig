@@ -63,8 +63,9 @@ func (dex *DEX) readHeader(file io.ReadSeeker) error {
 	if err != nil {
 		return err
 	}
-	// Check magic marker
-	if dex.Header.Magic != DEX_FILE_MAGIC {
+	// Check first 4 bytes of magic marker
+	// Added this change b/c the second 4 bytes might change based on version
+	if dex.Header.Magic[0] != 0x64 || dex.Header.Magic[1] != 0x65 || dex.Header.Magic[2] != 0x78 || dex.Header.Magic[3] != 0x0A {
 		return errors.New("Magic header does not match.")
 	}
 	// Check endianness
